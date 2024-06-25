@@ -80,7 +80,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'ace_it_db',
         'USER': 'ace_it_user',
-        'PASSWORD': '',
+        'PASSWORD': 'Aceit@13',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -104,6 +104,8 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+AUTH_USER_MODEL = 'api.User'
 
 
 # Internationalization
