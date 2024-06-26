@@ -2,8 +2,10 @@
 """
 Module for Serializers
 """
-from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
+from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 from .models import User
 
 
@@ -42,3 +44,23 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         """Creates a new user."""
         validated_data.pop('password2')
         return User.objects.create_user(**validated_data)
+
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Extends the TokenObtainPairSerializer to include user data in the response.
+    """
+    def validate(self, attrs):
+        """
+        Validates user credentials and returns token pair plus
+        user data in the response.
+        """
+        data = super().validate(attrs)
+        user = self.user
+        data.update({
+            'user_data': {
+                # will return the required user data
+            }
+        })
+
+        return data
