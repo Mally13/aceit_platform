@@ -1,5 +1,5 @@
 from django.urls import path
-from ..views.user_management_views import UserProfileView, UserRolesView
+from ..views.user_management_views import *
 
 urlpatterns = [
     path('user/profile/', UserProfileView.as_view(), name='user-profile'),

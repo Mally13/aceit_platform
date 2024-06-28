@@ -12,19 +12,6 @@ from ..models import User
 class UserRegistrationSerializer(serializers.ModelSerializer):
     """
     Serializes user registration data.
-
-    Fields:
-        email (str): User's email.
-        first_name (str): User's first name.
-        last_name (str): User's last name.
-        password (str): User's password.
-        password2 (str): Confirmation of user's password.
-        profile_picture (str): User's profile picture URL.
-        is_tutor (bool): Specifies if user is a tutor.
-
-    Methods:
-        validate(self, attrs): Validates if password and password2 match.
-        create(self, validated_data): Creates a new user.
     """
     password = serializers.CharField(write_only=True, required=True, validators=[validate_password])
     password2 = serializers.CharField(write_only=True, required=True)
@@ -64,3 +51,12 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         })
 
         return data
+
+
+class ChangePasswordSerializer(serializers.Serializer):
+    """
+    Serializes old_password and new_password for changing user password.
+    """
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, validators=[validate_password])
+
