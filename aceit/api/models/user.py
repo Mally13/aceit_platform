@@ -50,6 +50,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     first_name = models.CharField(max_length=150)    
     last_name = models.CharField(max_length=150) 
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    phone_number = models.CharField(max_length=15, blank=True, null=True)
     is_tutor = models.BooleanField(default=False)
 
     is_active = models.BooleanField(default=True)
