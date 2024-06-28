@@ -1,6 +1,4 @@
-<<<<<<< HEAD
 venv
-=======
 .venv
 *.pyc
->>>>>>> feature-authentication
+.env
