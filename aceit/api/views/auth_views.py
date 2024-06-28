@@ -10,7 +10,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework_simplejwt.tokens import RefreshToken
 
 from ..models import User
-from ..serializers.auth_serializers import (
+from ..serializers import (
     UserRegistrationSerializer, CustomTokenObtainPairSerializer
 )
 
