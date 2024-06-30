@@ -2,6 +2,7 @@
 """
 Module for views
 """
+from drf_spectacular.utils import extend_schema
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -43,6 +44,7 @@ class ChangePasswordView(APIView):
 
     POST method allows the logged in user to change their password.
     """
+    @extend_schema(responses=ChangePasswordSerializer)
     def post(self, request, *args, **kwargs):
         """
         Handles POST request to change the user's password.

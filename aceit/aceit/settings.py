@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_rest_passwordreset',
     'rest_framework',
     'rest_framework_simplejwt',
+    'drf_spectacular',
     'api.apps.ApiConfig',
 ]
 
@@ -118,6 +119,19 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': (
         'rest_framework.permissions.IsAuthenticated',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'AceIT plaform API',
+    'VERSION': '1.0.0',
+    'DESCRIPTION': 'API for AceIT platform',
+    'SWAGGER_UI_SETTINGS': {
+        'persistAuthorization': True
+    },
+    'AUTHENTICATION_CLASSES': {
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    }
 }
 
 SIMPLE_JWT = {
