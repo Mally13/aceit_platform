@@ -5,6 +5,7 @@ Module for Serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from .user_management_serializers import UserProfileSerializer
 
 from ..models import User
 
@@ -18,7 +19,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'password', 'password2', 'profile_picture', 'is_tutor')
+        fields = ('email', 'first_name', 'last_name', 'password', 'password2', 'profile_picture', 'is_tutor', 'is_student')
         extra_kwargs = {'first_name': {'required': True}, 'last_name': {'required': True}}
 
     def validate(self, attrs):
@@ -30,6 +31,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         """Creates a new user."""
         validated_data.pop('password2')
+        validated_data['is_student'] = True
         return User.objects.create_user(**validated_data)
 
 
@@ -44,9 +46,10 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         """
         data = super().validate(attrs)
         user = self.user
+        profile_data = UserProfileSerializer(user).data
         data.update({
             'user_data': {
-                # will return the required user data
+                'profile_data': profile_data
             }
         })
 
