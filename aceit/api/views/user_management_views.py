@@ -17,8 +17,11 @@ class UserProfileView(APIView):
     """
     API view for getting and updating user profiles.
     """
+<<<<<<< HEAD
     permission_classes = [IsAuthenticated]
 
+=======
+>>>>>>> feature-authentication
     def get(self, request):
         user = request.user
         serializer = UserProfileSerializer(user)
@@ -37,8 +40,11 @@ class UserRolesView(APIView):
     """
     API view for getting and updating user roles.
     """
+<<<<<<< HEAD
     permission_classes = [IsAuthenticated]
 
+=======
+>>>>>>> feature-authentication
     def get(self, request):
         user = request.user
         serializer = UserRoleSerializer(user)

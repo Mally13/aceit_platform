@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'api.apps.ApiConfig',
+    'rest_framework_swagger',
 ]
 
 MIDDLEWARE = [
