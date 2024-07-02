@@ -2,6 +2,7 @@ from rest_framework import serializers
 from ..models import User
 
 class UserProfileSerializer(serializers.ModelSerializer):
+    """Serializes profile data"""
     class Meta:
         model = User
         fields = ('email', 'first_name', 'last_name', 'profile_picture', 'phone_number', 'is_tutor', 'is_student')
@@ -16,6 +17,7 @@ class UserProfileSerializer(serializers.ModelSerializer):
         }
 
 class UserRoleSerializer(serializers.ModelSerializer):
+    """Serializes User roles data"""
     class Meta:
         model = User
         fields = ('is_tutor', 'is_student', 'is_staff')

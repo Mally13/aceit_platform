@@ -1,4 +1,5 @@
 from .auth_urls import urlpatterns as auth_urls
+from .test_urls import urlpatterns as test_urls
 from .user_management_urls import urlpatterns as user_management_urls
 from django.urls import path
 from rest_framework import permissions
@@ -26,4 +27,4 @@ swaggerpatterns = [
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
 
-urlpatterns = swaggerpatterns + auth_urls + user_management_urls
+urlpatterns = swaggerpatterns + auth_urls + user_management_urls + test_urls
