@@ -1,8 +1,8 @@
 from django.urls import path
-from ..views import CategoryListView, TestCreateView, TestListView
+from ..views import CategoryListView, TestListView
 
 urlpatterns = [
-    path('categories/', CategoryListView.as_view(), name='category-list'),
+    path('tests/categories/', CategoryListView.as_view(), name='category-list'),
     path('tests/', TestListView.as_view(), name='test-list'),
-    path('tests/create/', TestCreateView.as_view(), name='test-create'),
+    path('tests/category/tests/', TestListView.as_view(), name='categoty-test-list'),
 ]

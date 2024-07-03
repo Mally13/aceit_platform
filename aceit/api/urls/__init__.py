@@ -1,30 +1,17 @@
 from .auth_urls import urlpatterns as auth_urls
 from .test_urls import urlpatterns as test_urls
+from .tutor_urls import urlpatterns as tutor_urls
 from .user_management_urls import urlpatterns as user_management_urls
 from django.urls import path
 from rest_framework import permissions
 
-from drf_yasg.views import get_schema_view
-from drf_yasg import openapi
-
-schema_view = get_schema_view(
-    openapi.Info(
-        title="ACE IT API'",
-        default_version='v1',
-        description="Test description",
-        terms_of_service="https://www.google.com/policies/terms/",
-        contact=openapi.Contact(email="contact@yourapi.local"),
-        license=openapi.License(name="BSD License"),
-    ),
-    public=True,
-    permission_classes=(permissions.AllowAny,),
-)
+from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 
 
-
-swaggerpatterns = [
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-    path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
+doc_urls = [
+    path('schema/', SpectacularAPIView.as_view(), name='schema'),
+    path('schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
 
-urlpatterns = swaggerpatterns + auth_urls + user_management_urls + test_urls
+urlpatterns = doc_urls + auth_urls + user_management_urls + test_urls + tutor_urls

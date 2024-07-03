@@ -5,7 +5,7 @@ Module for views
 from rest_framework import generics, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from ..models import User
@@ -16,11 +16,9 @@ from ..serializers import (
 )
 
 
-class UserListCreate(generics.ListCreateAPIView):
+class UserListCreate(generics.CreateAPIView):
     """
     Create API view for user registration.
-
-    GET method returns a list of all users.
     """
     permission_classes = (AllowAny,)
     queryset = User.objects.all()
