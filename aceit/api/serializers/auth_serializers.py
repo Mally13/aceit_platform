@@ -6,6 +6,7 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from .user_management_serializers import UserProfileSerializer
 from ..models import User
 
 
@@ -44,9 +45,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         """
         data = super().validate(attrs)
         user = self.user
+        user_profile = UserProfileSerializer(user).data
         data.update({
             'user_data': {
-                # will return the required user data
+                'user_profile': user_profile
+                # more data to be returned
             }
         })
 
