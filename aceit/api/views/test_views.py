@@ -10,18 +10,17 @@ class CategoryListView(generics.ListAPIView):
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
 
-class TestRetrieveUpdateView(generics.RetrieveUpdateAPIView):
-    """Handles GET and PUT requests for a single Test instance."""
+class TestRetrieveView(generics.RetrieveAPIView):
+    """Handles GET requests for all or a single Test instance."""
     queryset = Test.objects.all()
     serializer_class = TestSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
-        """Ensures only the owner can update their test."""
-        user = self.request.user
-        if self.request.method == 'PUT':
-            return Test.objects.filter(created_by=user)
-        return super().get_queryset()
+    def retrieve(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
+        print(serializer.data)  # Print serialized data to debug
+        return Response(serializer.data)
 
 class TestListView(generics.ListAPIView):
     serializer_class = TestSerializer
@@ -31,19 +30,20 @@ class TestListView(generics.ListAPIView):
         """
         Optionally restricts the returned tests to a given category,
         by filtering against a `category_id` query parameter in the URL.
-        Also restricts the returned tests based on the user's role and test status.
+        Also restricts the returned tests based on the test status.
         """
-        category_id = self.request.query_params.get('category_id')
-        
+        category_id = self.kwargs.get('category_id')
+        tests = Test.objects.filter(status='complete')
+
         if category_id:
             try:
                 category = Category.objects.get(id=category_id)
-                tests = Test.objects.filter(category__in=category.get_descendants(include_self=True))
+                descendant_categories = category.get_descendants(include_self=True)
+                tests = tests.filter(category__in=descendant_categories)
             except Category.DoesNotExist:
                 raise NotFound(detail="Category not found.")
-        else:
-            tests = Test.objects.all()
-            return tests.filter(status='complete')
+
+        return tests
 
     def list(self, request, *args, **kwargs):
         """
@@ -61,4 +61,3 @@ class TestListView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
-
