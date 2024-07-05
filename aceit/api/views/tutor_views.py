@@ -120,7 +120,7 @@ class QuestionTutorAPIView(generics.ListCreateAPIView, generics.RetrieveUpdateDe
     def delete(self, request, *args, **kwargs):
         return self.destroy(request, *args, **kwargs)
     
-class QuestionTutorCreateAPIView(generics.ListCreateAPIView):
+class QuestionTutorCreateAPIView(generics.CreateAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]
