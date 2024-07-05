@@ -92,7 +92,7 @@ class TutorTestRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 #     serializer_class = TestTutorSerializer
 #     permission_classes = [permissions.IsAuthenticated, IsTutor]
 
-class QuestionTutorAPIView(generics.ListCreateAPIView, generics.RetrieveUpdateDestroyAPIView):
+class QuestionTutorAPIView(generics.ListAPIView, generics.RetrieveUpdateDestroyAPIView):
     queryset = Question.objects.all()
     serializer_class = QuestionTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]

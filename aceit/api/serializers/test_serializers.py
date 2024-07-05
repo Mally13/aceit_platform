@@ -10,12 +10,12 @@ class TestSerializer(serializers.ModelSerializer):
         model = Test
         fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'created_by', 'questions']
 
-    # def __init__(self, *args, **kwargs):
-    #     super(TestSerializer, self).__init__(*args, **kwargs)
-    #     request = self.context.get('request')
-    #     if request and request.method == 'POST':
-    #         # self.fields.pop('questions')
-    #         self.fields.pop('created_by')
+    def __init__(self, *args, **kwargs):
+        super(TestSerializer, self).__init__(*args, **kwargs)
+        request = self.context.get('request')
+        if request and request.method == 'POST':
+            self.fields.pop('questions')
+            self.fields.pop('created_by')
 
 class TestTutorSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True, required=False)
