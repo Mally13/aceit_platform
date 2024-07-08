@@ -41,6 +41,7 @@ class ChangePasswordView(APIView):
 
     POST method allows the logged in user to change their password.
     """
+    serializer_class = ChangePasswordSerializer
     def post(self, request, *args, **kwargs):
         """
         Handles POST request to change the user's password.

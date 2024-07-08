@@ -24,6 +24,11 @@ class TestTutorSerializer(serializers.ModelSerializer):
         model = Test
         fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'created_by', 'questions']
 
+    def create(self, validated_data):
+        """Remove questions from the validated data"""
+        validated_data.pop('questions', None)
+        return super().create(validated_data)
+
     def update(self, instance, validated_data):
         questions_data = validated_data.pop('questions', [])
         instance = super().update(instance, validated_data)

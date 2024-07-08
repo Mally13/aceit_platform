@@ -17,6 +17,7 @@ class UserProfileView(APIView):
     API view for getting and updating user profiles.
     """
     permission_classes = [IsAuthenticated]
+    serializer_class= UserProfileSerializer
 
     def get(self, request):
         user = request.user
@@ -37,6 +38,8 @@ class UserRolesView(APIView):
     API view for getting and updating user roles.
     """
     permission_classes = [IsAuthenticated]
+    serializer_class= UserRoleSerializer
+
 
     def get(self, request):
         user = request.user
