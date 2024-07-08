@@ -5,10 +5,12 @@ from ..permissions import IsTutor
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
+
 class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.filter(parent=None)
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
+
 
 class TestRetrieveView(generics.RetrieveAPIView):
     """Handles GET requests for all or a single Test instance."""
@@ -19,8 +21,8 @@ class TestRetrieveView(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        print(serializer.data)  # Print serialized data to debug
         return Response(serializer.data)
+
 
 class TestListView(generics.ListAPIView):
     serializer_class = TestSerializer
@@ -38,7 +40,8 @@ class TestListView(generics.ListAPIView):
         if category_id:
             try:
                 category = Category.objects.get(id=category_id)
-                descendant_categories = category.get_descendants(include_self=True)
+                descendant_categories = category.get_descendants(
+                    include_self=True)
                 tests = tests.filter(category__in=descendant_categories)
             except Category.DoesNotExist:
                 raise NotFound(detail="Category not found.")

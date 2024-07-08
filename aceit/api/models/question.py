@@ -11,6 +11,7 @@ class Question(models.Model):
     options = models.JSONField()
     correct_answers = models.JSONField()
     explanation = models.TextField()
+    has_multiple_correct_answers = models.BooleanField(default=False)
     reveal_answer_after_completion = models.BooleanField(default=False)
     reveal_explanation_after_completion = models.BooleanField(default=False)
 

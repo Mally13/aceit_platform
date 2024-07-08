@@ -2,13 +2,15 @@ from rest_framework import serializers
 from ..models import Test, Question
 from .question_serializers import QuestionSerializer
 
+
 class TestSerializer(serializers.ModelSerializer):
     """Defines Test Serializer"""
     questions = QuestionSerializer(many=True, read_only=True)
 
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'created_by', 'questions']
+        fields = ['id', 'title', 'description', 'display_picture',
+                  'category', 'status', 'created_by', 'questions']
 
     def __init__(self, *args, **kwargs):
         super(TestSerializer, self).__init__(*args, **kwargs)
@@ -17,12 +19,19 @@ class TestSerializer(serializers.ModelSerializer):
             self.fields.pop('questions')
             self.fields.pop('created_by')
 
+
 class TestTutorSerializer(serializers.ModelSerializer):
     questions = QuestionSerializer(many=True, required=False)
 
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'created_by', 'questions']
+        fields = ['id', 'title', 'description', 'display_picture',
+                  'category', 'status', 'created_by', 'questions']
+
+    def create(self, validated_data):
+        """Remove questions from the validated data"""
+        validated_data.pop('questions', None)
+        return super().create(validated_data)
 
     def update(self, instance, validated_data):
         questions_data = validated_data.pop('questions', [])
@@ -37,5 +46,3 @@ class TestTutorSerializer(serializers.ModelSerializer):
             else:
                 Question.objects.create(test=instance, **question_data)
         return instance
-
-
