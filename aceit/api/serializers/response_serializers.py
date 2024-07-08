@@ -10,6 +10,8 @@ from ..models import Response
 class ResponseSerializer(serializers.ModelSerializer):
     """
     Serializes test responses.
+
+    Ensures question id and response are included in request body.
     """
     class Meta:
         model = Response

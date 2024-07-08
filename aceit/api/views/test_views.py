@@ -1,6 +1,10 @@
 from rest_framework import generics, permissions, status
-from ..models import Test, Category
-from ..serializers import TestSerializer, CategorySerializer
+from ..models import (
+    Test, Category, Question, Reponse
+)
+from ..serializers import (
+    TestSerializer, CategorySerializer, TestResponseSerializer
+)
 from ..permissions import IsTutor
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
@@ -64,3 +68,43 @@ class TestListView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class SubmitTestView(generics.CreateAPIView):
+    serializer_class = TestResponseSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        test_id = serializer.validated_data['test_id']
+        responses = serializer.validated_data['responses']
+
+        try:
+            test = Test.objects.get(id=test_id)
+        except Test.DoesNotExist:
+            return Response({'error': 'The test: test_id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        total_marks = 0
+        student = request.user
+
+        for response_data in responses:
+            question_id = response_data['question']
+            try:
+                question = Question.objects.get(id=question_id)
+            except Question.DoesNotExist:
+                return (Response({'error': 'The question: question_id does not exist'}, status=status.HTTP_404_NOT_FOUND))
+
+            response = response_data['response']
+            response_obj = Response.objects.create(
+                question=question,
+                student=student,
+                is_correct=False,
+                response=response
+            )
+
+            correct_answers = question.correct_answers
+            if response.sort() == correct_answers.sort():
+                response_obj.is_correct = True
+                total_marks += 1
+            response_obj.save()

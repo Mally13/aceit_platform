@@ -3,6 +3,7 @@
 Module for model for test responses.
 """
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 from .question import Question
 from .user import User
@@ -18,8 +19,8 @@ class Response(models.Model):
     student = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='responses'
     )
-    is_correct = models.BooleanField()
-    response = models.JSONField()
+    is_correct = models.BooleanField(default=False)
+    response = ArrayField(models.TextField, blank=True, null=True)
 
     def __str__(self):
         """
