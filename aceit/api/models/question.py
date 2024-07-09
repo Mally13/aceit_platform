@@ -15,8 +15,6 @@ class Question(models.Model):
         Test, on_delete=models.CASCADE, related_name='questions')
     images = models.ImageField(
         upload_to='question_images/', blank=True, null=True)
-    # reveal_answer_after_completion = models.BooleanField(default=False)
-    # reveal_explanation_after_completion = models.BooleanField(default=False)
 
     def __str__(self):
         return f"Question {self.id} for {self.test.title}"

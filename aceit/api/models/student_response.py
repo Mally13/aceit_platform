@@ -20,7 +20,7 @@ class StudentResponse(models.Model):
         User, on_delete=models.CASCADE, related_name='responses'
     )
     is_correct = models.BooleanField(default=False)
-    response = ArrayField(models.TextField(), blank=True, null=True)
+    response = ArrayField(models.TextField())
 
     def __str__(self):
         """

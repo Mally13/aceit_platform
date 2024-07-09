@@ -7,3 +7,4 @@ from .category_serializers import CategorySerializer
 from .test_serializers import TestSerializer, TestTutorSerializer
 from .question_serializers import *
 from .response_serializers import TestResponseSerializer
+from .attempted_tests_serializers import AttemptedTestsSerializer, AttemptedQuestionSerializer

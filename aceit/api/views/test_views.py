@@ -1,10 +1,13 @@
 from decimal import Decimal
+from django.db.models import Avg
 from rest_framework import generics, permissions, status
 from ..models import (
     Test, Category, Question, StudentResponse, UserTestResult
 )
 from ..serializers import (
-    TestSerializer, CategorySerializer, TestResponseSerializer
+    TestSerializer, CategorySerializer,
+    TestResponseSerializer, AttemptedTestsSerializer,
+    AttemptedQuestionSerializer
 )
 from ..permissions import IsTutor
 from rest_framework.exceptions import NotFound
@@ -123,3 +126,49 @@ class SubmitTestView(generics.CreateAPIView):
         )
 
         return Response({'percentage_score': percentage_score}, status=status.HTTP_201_CREATED)
+
+
+class AttemptedTestsView(generics.ListAPIView):
+    serializer_class = AttemptedTestsSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        return UserTestResult.objects.filter(student=user)
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        serializer.is_valid(raise_exception=True)
+        tests_average = queryset.aggregate(
+            average_score=Avg('percentage_score', default=0))
+
+        return Response(
+            {
+                'tests': serializer.data,
+                'tests_average': tests_average['average_score']
+            },
+            status=status.HTTP_200_OK
+        )
+
+
+class AttemptedTestView(generics.RetrieveAPIView):
+    serializer_class = AttemptedQuestionSerializer
+
+    def get_queryset(self):
+        test_id = self.kwargs['test_id']
+        return Question.objects.filter(test__id=test_id)
+
+    def retrieve(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True, context={
+                                         'student': request.user})
+        serializer.is_valid(raise_exception=True)
+        test_result = UserTestResult(
+            test__id=kwargs['test_id'], student=request.user)
+        test_result_serializer = AttemptedTestsSerializer(test_result)
+        return Response(
+            {
+                'questions_responses': serializer.data, 'test_result': test_result_serializer.data
+            },
+            status=status.HTTP_200_OK
+        )
