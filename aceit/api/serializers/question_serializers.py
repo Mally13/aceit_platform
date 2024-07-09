@@ -10,14 +10,16 @@ class QuestionTutorSerializer(serializers.ModelSerializer):
     """Serializes the question data for the tutor"""
     class Meta:
         model = Question
-        fields = ['id', 'test', 'images', 'question_text',
+        fields = ['id', 'question_text', 'images', 'has_multiple_correct_answers', 'marks',
                   'options', 'correct_answers', 'explanation']
 
-    def __init__(self, *args, **kwargs):
-        super(QuestionTutorSerializer, self).__init__(*args, **kwargs)
-        request = self.context.get('request')
-        if request and request.method == 'POST':
-            self.fields.pop('test')
+class NewQuestionTutorSerializer(serializers.ModelSerializer):
+    """Serializes the question data for the tutor"""
+    class Meta:
+        model = Question
+        fields = ['question_text', 'images', 'has_multiple_correct_answers', 'marks',
+                  'options', 'correct_answers', 'explanation']
+
 
 
 class QuestionSerializer(serializers.ModelSerializer):

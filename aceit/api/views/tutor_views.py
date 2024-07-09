@@ -6,7 +6,7 @@ from rest_framework import generics, permissions, exceptions, status
 from rest_framework.response import Response
 
 from ..models import Test, Question
-from ..serializers import TestTutorSerializer, QuestionTutorSerializer
+from ..serializers import TestTutorSerializer, NewQuestionTutorSerializer, QuestionTutorSerializer, TestListTutorSerializer
 from ..permissions import IsTutor
 
 
@@ -22,7 +22,7 @@ class TutorTestCreateView(generics.CreateAPIView):
 
 class TutorDraftTestsView(generics.ListAPIView):
     """A view to handle tutors drafts"""
-    serializer_class = TestTutorSerializer
+    serializer_class = TestListTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]
 
     def get_queryset(self):
@@ -35,7 +35,7 @@ class TutorDraftTestsView(generics.ListAPIView):
 
 class TutorCompletedTestsView(generics.ListAPIView):
     """A view to handle tutors completed views"""
-    serializer_class = TestTutorSerializer
+    serializer_class = TestListTutorSerializer
     permission_classes = [permissions.IsAuthenticated,IsTutor]
 
     def get_queryset(self):
@@ -132,7 +132,7 @@ class QuestionTutorAPIView(generics.ListAPIView, generics.RetrieveUpdateDestroyA
 class QuestionTutorCreateAPIView(generics.CreateAPIView):
     """Enables a user to POST a question"""
     queryset = Question.objects.all()
-    serializer_class = QuestionTutorSerializer
+    serializer_class = NewQuestionTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]
 
     def perform_create(self, serializer):

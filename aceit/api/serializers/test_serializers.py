@@ -3,43 +3,69 @@
 Module defines test serializers
 """
 from rest_framework import serializers
+from drf_spectacular.utils import extend_schema_field
+
 from ..models import Test, Question
-from .question_serializers import QuestionSerializer
+from .question_serializers import QuestionSerializer, QuestionTutorSerializer
 
 
 class TestSerializer(serializers.ModelSerializer):
     """Defines Test Serializer"""
     questions = QuestionSerializer(many=True, read_only=True)
+    num_questions = serializers.SerializerMethodField()
     created_by = serializers.SerializerMethodField()
-
+    category = serializers.SerializerMethodField()
+    
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'display_picture', 'category', 'created_by', 'questions']
+        fields = ['id', 'title', 'description', 'display_picture', 'category', 'duration', 'term', 'num_questions', 'created_by', 'questions']
 
+    @extend_schema_field(serializers.StringRelatedField)
+    def get_category(self, obj):
+        """Get the category of the test"""
+        return f"{obj.category.parent.name} {obj.category.name}"
+
+    @extend_schema_field(serializers.StringRelatedField)
     def get_created_by(self, obj):
         """Get the first and last name of the tutor"""
         return f"{obj.created_by.first_name} {obj.created_by.last_name}"
+
+    @extend_schema_field(serializers.StringRelatedField)
+    def get_num_questions(self, obj):
+        """Get the number of questions associated with this test"""
+        return obj.questions.count()
 
 class TestListSerializer(serializers.ModelSerializer):
     """Defines Test List Serializer"""
     created_by = serializers.SerializerMethodField()
+    num_questions = serializers.SerializerMethodField()
+    category = serializers.SerializerMethodField()
+
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'display_picture', 'category', 'created_by']
+        fields = ['id', 'title', 'description', 'display_picture', 'category', 'duration', 'term', 'num_questions', 'created_by']
 
+    @extend_schema_field(serializers.StringRelatedField)
     def get_created_by(self, obj):
         """Get the first and last name of the tutor"""
         return f"{obj.created_by.first_name} {obj.created_by.last_name}"
+
+    @extend_schema_field(serializers.StringRelatedField)
+    def get_category(self, obj):
+        """Get the category of the test"""
+        return f"{obj.category.parent.name} {obj.category.name}"
         
-
-
+    @extend_schema_field(serializers.StringRelatedField)
+    def get_num_questions(self, obj):
+        """Get the number of questions associated with this test"""
+        return obj.questions.count()
 class TestTutorSerializer(serializers.ModelSerializer):
     """Serializes test data of the tutor"""
-    questions = QuestionSerializer(many=True, required=False)
+    questions = QuestionTutorSerializer(many=True, required=False)
 
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'questions']
+        fields = ['id', 'title', 'description',  'display_picture', 'category', 'duration', 'term', 'status', 'questions']
 
     def create(self, validated_data):
         """Remove questions from the validated data"""
@@ -59,3 +85,15 @@ class TestTutorSerializer(serializers.ModelSerializer):
             else:
                 Question.objects.create(test=instance, **question_data)
         return instance
+
+class TestListTutorSerializer(serializers.ModelSerializer):
+    """Serializes test data of the tutor"""
+    num_questions = serializers.SerializerMethodField()
+    class Meta:
+        model = Test
+        fields = ['id', 'title', 'description', 'display_picture', 'category', 'duration', 'term', 'num_questions']
+    
+    @extend_schema_field(serializers.StringRelatedField)
+    def get_num_questions(self, obj):
+        """Get the number of questions associated with this test"""
+        return obj.questions.count()
