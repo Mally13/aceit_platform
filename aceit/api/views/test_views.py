@@ -1,17 +1,25 @@
+#!/usr/bin/env python3
+"""
+Module for test views
+"""
+
 from rest_framework import generics, permissions, status
-from ..models import Test, Category
-from ..serializers import TestSerializer, CategorySerializer
-from ..permissions import IsTutor
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
+from ..models import Test, Category
+from ..serializers import TestSerializer, CategorySerializer, TestListSerializer
+from ..permissions import IsTutor
+
+
 class CategoryListView(generics.ListAPIView):
+    """Lists all Categories and their child categories"""
     queryset = Category.objects.filter(parent=None)
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
 
 class TestRetrieveView(generics.RetrieveAPIView):
-    """Handles GET requests for all or a single Test instance."""
+    """Handles GET requests a single Test instance."""
     queryset = Test.objects.all()
     serializer_class = TestSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -19,11 +27,11 @@ class TestRetrieveView(generics.RetrieveAPIView):
     def retrieve(self, request, *args, **kwargs):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
-        print(serializer.data)  # Print serialized data to debug
         return Response(serializer.data)
 
 class TestListView(generics.ListAPIView):
-    serializer_class = TestSerializer
+    """Handles GET request for all tests"""
+    serializer_class = TestListSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):

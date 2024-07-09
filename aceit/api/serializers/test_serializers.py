@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""
+Module defines test serializers
+"""
 from rest_framework import serializers
 from ..models import Test, Question
 from .question_serializers import QuestionSerializer
@@ -5,24 +9,35 @@ from .question_serializers import QuestionSerializer
 class TestSerializer(serializers.ModelSerializer):
     """Defines Test Serializer"""
     questions = QuestionSerializer(many=True, read_only=True)
+    created_by = serializers.SerializerMethodField()
 
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'created_by', 'questions']
+        fields = ['id', 'title', 'description', 'display_picture', 'category', 'created_by', 'questions']
 
-    def __init__(self, *args, **kwargs):
-        super(TestSerializer, self).__init__(*args, **kwargs)
-        request = self.context.get('request')
-        if request and request.method == 'POST':
-            self.fields.pop('questions')
-            self.fields.pop('created_by')
+    def get_created_by(self, obj):
+        """Get the first and last name of the tutor"""
+        return f"{obj.created_by.first_name} {obj.created_by.last_name}"
+
+class TestListSerializer(serializers.ModelSerializer):
+    """Defines Test List Serializer"""
+    created_by = serializers.SerializerMethodField()
+    class Meta:
+        model = Test
+        fields = ['id', 'title', 'description', 'display_picture', 'category', 'created_by']
+
+    def get_created_by(self, obj):
+        """Get the first and last name of the tutor"""
+        return f"{obj.created_by.first_name} {obj.created_by.last_name}"
+        
 
 class TestTutorSerializer(serializers.ModelSerializer):
+    """Serializes test data of the tutor"""
     questions = QuestionSerializer(many=True, required=False)
 
     class Meta:
         model = Test
-        fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'created_by', 'questions']
+        fields = ['id', 'title', 'description', 'display_picture', 'category', 'status', 'questions']
 
     def create(self, validated_data):
         """Remove questions from the validated data"""

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module for Serializers
+Module for Auth Serializers
 """
 from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers

@@ -1,3 +1,7 @@
+#!/usr/bin/env python3
+"""
+Module defines serializers for user data
+"""
 from rest_framework import serializers
 from ..models import User
 

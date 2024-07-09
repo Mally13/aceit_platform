@@ -1,8 +1,14 @@
+#!/usr/bin/env python3
+"""
+Module for Tutorviews
+"""
 from rest_framework import generics, permissions, exceptions, status
+from rest_framework.response import Response
+
 from ..models import Test, Question
 from ..serializers import TestTutorSerializer, QuestionTutorSerializer
 from ..permissions import IsTutor
-from rest_framework.response import Response
+
 
 class TutorTestCreateView(generics.CreateAPIView):
     """Handles POST requests for Test model."""
@@ -15,6 +21,7 @@ class TutorTestCreateView(generics.CreateAPIView):
         serializer.save(created_by=self.request.user)
 
 class TutorDraftTestsView(generics.ListAPIView):
+    """A view to handle tutors drafts"""
     serializer_class = TestTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]
 
@@ -27,6 +34,7 @@ class TutorDraftTestsView(generics.ListAPIView):
 
 
 class TutorCompletedTestsView(generics.ListAPIView):
+    """A view to handle tutors completed views"""
     serializer_class = TestTutorSerializer
     permission_classes = [permissions.IsAuthenticated,IsTutor]
 
@@ -93,6 +101,7 @@ class TutorTestRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
 #     permission_classes = [permissions.IsAuthenticated, IsTutor]
 
 class QuestionTutorAPIView(generics.ListAPIView, generics.RetrieveUpdateDestroyAPIView):
+    """Handles question views for the tutor"""
     queryset = Question.objects.all()
     serializer_class = QuestionTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]
@@ -121,6 +130,7 @@ class QuestionTutorAPIView(generics.ListAPIView, generics.RetrieveUpdateDestroyA
         return self.destroy(request, *args, **kwargs)
     
 class QuestionTutorCreateAPIView(generics.CreateAPIView):
+    """Enables a user to POST a question"""
     queryset = Question.objects.all()
     serializer_class = QuestionTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]

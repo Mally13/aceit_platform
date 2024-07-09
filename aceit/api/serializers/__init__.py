@@ -1,8 +1,5 @@
-from .auth_serializers import UserRegistrationSerializer
-from .auth_serializers import CustomTokenObtainPairSerializer
-from .auth_serializers import ChangePasswordSerializer
-from .user_management_serializers import UserProfileSerializer
-from .user_management_serializers import UserRoleSerializer
-from .category_serializers import CategorySerializer
-from .test_serializers import TestSerializer, TestTutorSerializer
+from .auth_serializers import *
+from .user_management_serializers import *
+from .category_serializers import *
+from .test_serializers import *
 from .question_serializers import *

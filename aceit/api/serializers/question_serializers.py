@@ -1,7 +1,12 @@
+#!/usr/bin/env python3
+"""
+Module defines serializers for questions
+"""
 from rest_framework import serializers
 from ..models import Question
 
 class QuestionTutorSerializer(serializers.ModelSerializer):
+    """Serializes the question data for the tutor"""
     class Meta:
         model = Question
         fields = ['id', 'test', 'images', 'question_text', 'options', 'correct_answer', 'explanation']
@@ -13,6 +18,9 @@ class QuestionTutorSerializer(serializers.ModelSerializer):
             self.fields.pop('test')
 
 class QuestionSerializer(serializers.ModelSerializer):
+    """
+    Serializes question data for the student who is yet to do a test
+    """
     reveal_answer_after_completion = serializers.BooleanField(read_only=True)
     reveal_explanation_after_completion = serializers.BooleanField(read_only=True)
 

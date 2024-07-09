@@ -1,7 +1,12 @@
+#!/usr/bin/env python3
+"""
+Module defines app's question model
+"""
 from django.db import models
 from .test import Test
 
 class Question(models.Model):
+    """"Defines the question model of the app"""
     test = models.ForeignKey(Test, on_delete=models.CASCADE, related_name='questions')
     images = models.ImageField(upload_to='question_images/', blank=True, null=True)
     question_text = models.TextField()
