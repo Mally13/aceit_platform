@@ -1,6 +1,7 @@
+from decimal import Decimal
 from rest_framework import generics, permissions, status
 from ..models import (
-    Test, Category, Question, Reponse
+    Test, Category, Question, StudentResponse, UserTestResult
 )
 from ..serializers import (
     TestSerializer, CategorySerializer, TestResponseSerializer
@@ -85,7 +86,8 @@ class SubmitTestView(generics.CreateAPIView):
         except Test.DoesNotExist:
             return Response({'error': 'The test: test_id does not exist'}, status=status.HTTP_404_NOT_FOUND)
 
-        total_marks = 0
+        marks_attainable = 0
+        student_marks = 0
         student = request.user
 
         for response_data in responses:
@@ -96,7 +98,7 @@ class SubmitTestView(generics.CreateAPIView):
                 return (Response({'error': 'The question: question_id does not exist'}, status=status.HTTP_404_NOT_FOUND))
 
             response = response_data['response']
-            response_obj = Response.objects.create(
+            response_obj = StudentResponse.objects.create(
                 question=question,
                 student=student,
                 is_correct=False,
@@ -104,7 +106,20 @@ class SubmitTestView(generics.CreateAPIView):
             )
 
             correct_answers = question.correct_answers
+            marks_attainable += question.marks
             if response.sort() == correct_answers.sort():
                 response_obj.is_correct = True
-                total_marks += 1
+                student_marks += question.marks
             response_obj.save()
+
+        percentage_score = (Decimal(student_marks) /
+                            Decimal(marks_attainable)) * 100
+        percentage_score = round(percentage_score, 2)
+
+        UserTestResult.objects.create(
+            test=test,
+            student=student,
+            percentage_score=percentage_score
+        )
+
+        return Response({'percentage_score': percentage_score}, status=status.HTTP_201_CREATED)

@@ -6,10 +6,11 @@ from .test import Test
 
 class Question(models.Model):
     question_text = models.TextField()
-    options = ArrayField(models.TextField, blank=True, null=True)
-    correct_answers = ArrayField(models.TextField)
+    options = ArrayField(models.TextField())
+    correct_answers = ArrayField(models.TextField())
     explanation = models.TextField()
     has_multiple_correct_answers = models.BooleanField()
+    marks = models.IntegerField()
     test = models.ForeignKey(
         Test, on_delete=models.CASCADE, related_name='questions')
     images = models.ImageField(

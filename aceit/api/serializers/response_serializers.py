@@ -4,7 +4,7 @@ Module for Test responses Serializers
 """
 from rest_framework import serializers
 
-from ..models import Response
+from ..models import StudentResponse
 
 
 class ResponseSerializer(serializers.ModelSerializer):
@@ -14,7 +14,7 @@ class ResponseSerializer(serializers.ModelSerializer):
     Ensures question id and response are included in request body.
     """
     class Meta:
-        model = Response
+        model = StudentResponse
         fields = ['question', 'response']
 
 
