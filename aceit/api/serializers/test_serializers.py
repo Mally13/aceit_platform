@@ -6,6 +6,7 @@ from rest_framework import serializers
 from ..models import Test, Question
 from .question_serializers import QuestionSerializer
 
+
 class TestSerializer(serializers.ModelSerializer):
     """Defines Test Serializer"""
     questions = QuestionSerializer(many=True, read_only=True)
@@ -30,6 +31,7 @@ class TestListSerializer(serializers.ModelSerializer):
         """Get the first and last name of the tutor"""
         return f"{obj.created_by.first_name} {obj.created_by.last_name}"
         
+
 
 class TestTutorSerializer(serializers.ModelSerializer):
     """Serializes test data of the tutor"""
@@ -57,5 +59,3 @@ class TestTutorSerializer(serializers.ModelSerializer):
             else:
                 Question.objects.create(test=instance, **question_data)
         return instance
-
-

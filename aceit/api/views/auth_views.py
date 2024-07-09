@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module for views
+Module for user creation and authentication views
 """
 from rest_framework import generics, status
 from rest_framework.views import APIView
@@ -42,6 +42,7 @@ class ChangePasswordView(APIView):
     POST method allows the logged in user to change their password.
     """
     serializer_class = ChangePasswordSerializer
+
     def post(self, request, *args, **kwargs):
         """
         Handles POST request to change the user's password.
@@ -58,7 +59,7 @@ class ChangePasswordView(APIView):
                     {'error': 'Incorrect old password'},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            
+
             user.set_password(new_password)
             user.save()
             return Response(

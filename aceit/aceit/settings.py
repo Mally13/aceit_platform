@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'api.apps.ApiConfig',
     'drf_spectacular',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

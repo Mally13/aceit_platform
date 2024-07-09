@@ -7,8 +7,8 @@ from rest_framework import generics, permissions, status
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
-from ..models import Test, Category
-from ..serializers import TestSerializer, CategorySerializer, TestListSerializer
+from ..models import Test, Category, Question
+from ..serializers import TestSerializer, CategorySerializer, TestListSerializer, TestResponseSerializer
 from ..permissions import IsTutor
 
 
@@ -17,6 +17,7 @@ class CategoryListView(generics.ListAPIView):
     queryset = Category.objects.filter(parent=None)
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
+
 
 class TestRetrieveView(generics.RetrieveAPIView):
     """Handles GET requests a single Test instance."""
@@ -28,6 +29,7 @@ class TestRetrieveView(generics.RetrieveAPIView):
         instance = self.get_object()
         serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
 
 class TestListView(generics.ListAPIView):
     """Handles GET request for all tests"""
@@ -46,7 +48,8 @@ class TestListView(generics.ListAPIView):
         if category_id:
             try:
                 category = Category.objects.get(id=category_id)
-                descendant_categories = category.get_descendants(include_self=True)
+                descendant_categories = category.get_descendants(
+                    include_self=True)
                 tests = tests.filter(category__in=descendant_categories)
             except Category.DoesNotExist:
                 raise NotFound(detail="Category not found.")
@@ -69,3 +72,43 @@ class TestListView(generics.ListAPIView):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data)
+
+
+class SubmitTestView(generics.CreateAPIView):
+    serializer_class = TestResponseSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        test_id = serializer.validated_data['test_id']
+        responses = serializer.validated_data['responses']
+
+        try:
+            test = Test.objects.get(id=test_id)
+        except Test.DoesNotExist:
+            return Response({'error': 'The test: test_id does not exist'}, status=status.HTTP_404_NOT_FOUND)
+
+        total_marks = 0
+        student = request.user
+
+        for response_data in responses:
+            question_id = response_data['question']
+            try:
+                question = Question.objects.get(id=question_id)
+            except Question.DoesNotExist:
+                return (Response({'error': 'The question: question_id does not exist'}, status=status.HTTP_404_NOT_FOUND))
+
+            response = response_data['response']
+            response_obj = Response.objects.create(
+                question=question,
+                student=student,
+                is_correct=False,
+                response=response
+            )
+
+            correct_answers = question.correct_answers
+            if response.sort() == correct_answers.sort():
+                response_obj.is_correct = True
+                total_marks += 1
+            response_obj.save()
