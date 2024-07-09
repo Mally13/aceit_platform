@@ -1,8 +1,11 @@
+#!/usr/bin/env python3
+"""
+Module defines app's question model
+"""
 from django.db import models
 from django.contrib.postgres.fields import ArrayField
 
 from .test import Test
-
 
 class Question(models.Model):
     question_text = models.TextField()

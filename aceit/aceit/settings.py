@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'api.apps.ApiConfig',
     'drf_spectacular',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [
@@ -160,3 +161,16 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'api.User'
+
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'ACE IT API',
+    'DESCRIPTION': 'An online revision platform, simplifying test creation and evaluation.',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
+    'DEVELOPERS': [
+        'Karen Miano',
+        'Mary Mutuku'
+    ],
+    # Add other settings as needed
+}

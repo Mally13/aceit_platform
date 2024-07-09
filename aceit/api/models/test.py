@@ -1,9 +1,14 @@
+#!/usr/bin/env python3
+"""
+Module defines app Test model
+"""
 from django.db import models
 from django.conf import settings
 from .category import Category
 
 
 class Test(models.Model):
+    """Defines the test model of the app"""
     STATUS_CHOICES = [
         ('draft', 'Draft'),
         ('complete', 'Complete'),

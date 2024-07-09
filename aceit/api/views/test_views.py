@@ -13,15 +13,20 @@ from ..permissions import IsTutor
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 
+from ..models import Test, Category, Question, StudentResponse, UserTestResult
+from ..serializers import TestSerializer, CategorySerializer, TestListSerializer, TestResponseSerializer
+from ..permissions import IsTutor
+
 
 class CategoryListView(generics.ListAPIView):
+    """Lists all Categories and their child categories"""
     queryset = Category.objects.filter(parent=None)
     serializer_class = CategorySerializer
     permission_classes = [permissions.AllowAny]
 
 
 class TestRetrieveView(generics.RetrieveAPIView):
-    """Handles GET requests for all or a single Test instance."""
+    """Handles GET requests a single Test instance."""
     queryset = Test.objects.all()
     serializer_class = TestSerializer
     permission_classes = [permissions.IsAuthenticated]
@@ -33,7 +38,8 @@ class TestRetrieveView(generics.RetrieveAPIView):
 
 
 class TestListView(generics.ListAPIView):
-    serializer_class = TestSerializer
+    """Handles GET request for all tests"""
+    serializer_class = TestListSerializer
     permission_classes = [permissions.AllowAny]
 
     def get_queryset(self):
