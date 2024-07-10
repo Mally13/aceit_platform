@@ -86,6 +86,13 @@ class TestTutorSerializer(serializers.ModelSerializer):
                 Question.objects.create(test=instance, **question_data)
         return instance
 
+class NewTestTutorSerializer(serializers.ModelSerializer):
+    """Serializes test data of the tutor"""
+
+    class Meta:
+        model = Test
+        fields = ['title', 'description',  'display_picture', 'category', 'duration', 'term', 'status']
+
 class TestListTutorSerializer(serializers.ModelSerializer):
     """Serializes test data of the tutor"""
     num_questions = serializers.SerializerMethodField()

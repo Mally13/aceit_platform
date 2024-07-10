@@ -6,14 +6,14 @@ from rest_framework import generics, permissions, exceptions, status
 from rest_framework.response import Response
 
 from ..models import Test, Question
-from ..serializers import TestTutorSerializer, NewQuestionTutorSerializer, QuestionTutorSerializer, TestListTutorSerializer
+from ..serializers import TestTutorSerializer, NewTestTutorSerializer, NewQuestionTutorSerializer, QuestionTutorSerializer, TestListTutorSerializer
 from ..permissions import IsTutor
 
 
 class TutorTestCreateView(generics.CreateAPIView):
     """Handles POST requests for Test model."""
     queryset = Test.objects.all()
-    serializer_class = TestTutorSerializer
+    serializer_class = NewTestTutorSerializer
     permission_classes = [permissions.IsAuthenticated, IsTutor]
 
     def perform_create(self, serializer):
