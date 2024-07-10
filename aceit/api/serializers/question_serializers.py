@@ -28,7 +28,7 @@ class QuestionSerializer(serializers.ModelSerializer):
     """
     class Meta:
         model = Question
-        fields = ['id', 'test', 'images', 'question_text', 'options']
+        fields = ['id', 'test', 'images', 'question_text', 'options', 'has_multiple_correct_answers']
 
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)
