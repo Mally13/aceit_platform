@@ -22,5 +22,4 @@ class TestResponseSerializer(serializers.Serializer):
     """
     Serializes incoming responses for a test.
     """
-    test_id = serializers.IntegerField()
     responses = ResponseSerializer(many=True)

@@ -14,6 +14,8 @@ class QuestionListView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
-        """"""
+        """
+        Filters the questions based on the test id
+        """
         test_id = self.kwargs['test_id']
         return Question.objects.filter(test_id=test_id)

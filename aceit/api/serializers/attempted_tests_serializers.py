@@ -30,14 +30,21 @@ class StudentResponseSerializer(serializers.ModelSerializer):
 
 
 class AttemptedQuestionSerializer(serializers.ModelSerializer):
-    question = QuestionSerializer()
+    question = serializers.SerializerMethodField()
     student_response = serializers.SerializerMethodField()
 
     class Meta:
         model = Question
         fields = ['question', 'student_response']
 
+    def get_question(self, obj):
+        return QuestionSerializer(obj).data
+
     def get_student_response(self, obj):
         student = self.context['student']
-        response = StudentResponse.objects.get(student=student, question=obj)
-        return StudentResponseSerializer(response).data
+        try:
+            response = StudentResponse.objects.get(
+                student=student, question=obj)
+            return StudentResponseSerializer(response).data
+        except StudentResponse.DoesNotExist:
+            return None

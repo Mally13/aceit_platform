@@ -8,6 +8,6 @@ urlpatterns = [
     path('student/tests/attempted/<int:test_id>', AttemptedTestView.as_view(),
          name='student-attempted-test'),
     path(
-        'student/tests/responses/', SubmitTestView.as_view(), name='student-submit-test'
+        'student/tests/<int:test_id>/responses/', SubmitTestView.as_view(), name='student-submit-test'
     ),
 ]

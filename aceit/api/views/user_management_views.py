@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Module for views
+Module for UserProfile views
 """
 from rest_framework import generics, status
 from rest_framework.views import APIView
@@ -17,7 +17,7 @@ class UserProfileView(APIView):
     API view for getting and updating user profiles.
     """
     permission_classes = [IsAuthenticated]
-    serializer_class= UserProfileSerializer
+    serializer_class = UserProfileSerializer
 
     def get(self, request):
         user = request.user
@@ -38,8 +38,7 @@ class UserRolesView(APIView):
     API view for getting and updating user roles.
     """
     permission_classes = [IsAuthenticated]
-    serializer_class= UserRoleSerializer
-
+    serializer_class = UserRoleSerializer
 
     def get(self, request):
         user = request.user
