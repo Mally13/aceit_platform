@@ -13,6 +13,7 @@ class QuestionTutorSerializer(serializers.ModelSerializer):
         fields = ['id', 'question_text', 'images', 'has_multiple_correct_answers', 'marks',
                   'options', 'correct_answers', 'explanation']
 
+
 class NewQuestionTutorSerializer(serializers.ModelSerializer):
     """Serializes the question data for the tutor"""
     class Meta:
@@ -21,14 +22,14 @@ class NewQuestionTutorSerializer(serializers.ModelSerializer):
                   'options', 'correct_answers', 'explanation']
 
 
-
 class QuestionSerializer(serializers.ModelSerializer):
     """
     Serializes question data for the student who is yet to do a test
     """
     class Meta:
         model = Question
-        fields = ['id', 'test', 'images', 'question_text', 'options']
+        fields = ['id', 'test', 'images', 'question_text',
+                  'has_multiple_correct_answers', 'marks', 'options']
 
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)

@@ -137,13 +137,20 @@ class SubmitTestView(generics.CreateAPIView):
                         student_marks += question.marks
 
             if response_obj is None:
-                response_obj = StudentResponse.objects.create(
-                    question=question,
-                    student=student,
-                    response=[],
-                    is_correct=False
-                )
-
+                try:
+                    response_obj = StudentResponse.objects.get(
+                        question=question,
+                        student=student,
+                    )
+                    response_obj.response = []
+                    response_obj.is_correct = False
+                except StudentResponse.DoesNotExist:
+                    response_obj = StudentResponse.objects.create(
+                        question=question,
+                        student=student,
+                        response=[],
+                        is_correct=False
+                    )
             response_obj.save()
 
         percentage_score = (Decimal(student_marks) /
