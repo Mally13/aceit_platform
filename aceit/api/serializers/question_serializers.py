@@ -26,14 +26,9 @@ class QuestionSerializer(serializers.ModelSerializer):
     """
     Serializes question data for the student who is yet to do a test
     """
-    reveal_answer_after_completion = serializers.BooleanField(read_only=True)
-    reveal_explanation_after_completion = serializers.BooleanField(
-        read_only=True)
-
     class Meta:
         model = Question
-        fields = ['id', 'test', 'images', 'question_text', 'options',
-                  'reveal_answer_after_completion', 'reveal_explanation_after_completion']
+        fields = ['id', 'test', 'images', 'question_text', 'options']
 
     # def to_representation(self, instance):
     #     data = super().to_representation(instance)
