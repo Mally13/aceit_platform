@@ -30,11 +30,3 @@ class QuestionSerializer(serializers.ModelSerializer):
         model = Question
         fields = ['id', 'test', 'images', 'question_text',
                   'has_multiple_correct_answers', 'marks', 'options']
-
-    # def to_representation(self, instance):
-    #     data = super().to_representation(instance)
-    #     user = self.context['request'].user
-    #     if user.has_completed_test(instance.test):
-    #         data['correct_answer'] = instance.correct_answer
-    #         data['explanation'] = instance.explanation
-    #     return data
