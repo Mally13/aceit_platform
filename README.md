@@ -56,6 +56,8 @@ Aceit Platform is an online revision platform that allows students to take tests
 
 ## Usage
 
+To view and try out the API endpoints navigate to `http://127.0.0.1:8000/api/v1/schema/swagger-ui/`.
+
 To access the Django admin panel, navigate to `http://127.0.0.1:8000/admin` and log in with the superuser credentials.
 
 ## API Endpoints
@@ -100,7 +102,7 @@ Here are some of the key API endpoints:
 
 ## Authentication
 
-This project uses JWT (JSON Web Tokens) for authentication. To obtain a token, use the `/api/v1/account/login/` endpoint. Include the access token in the `Authorization` header of your requests as follows:
+This project uses JWT (JSON Web Tokens) for authentication. To obtain a token, use the `/api/v1/account/login/` endpoint. Include the access token in the `Authorization` header of your requests.
 
 ## Permissions
 
