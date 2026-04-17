@@ -1,6 +1,17 @@
-venv
-.venv
-__pycache__
+# Python
+venv/
+.venv/
+__pycache__/
 *.pyc
+*.pyo
+*.pyd
+
+# Django
+*.sqlite3
+*.dump
+dump.json
+media/
+staticfiles/
 .env
+
 dummy.md
